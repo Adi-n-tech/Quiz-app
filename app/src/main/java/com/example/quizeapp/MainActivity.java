@@ -1,13 +1,23 @@
 package com.example.quizeapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quizeapp.databinding.ActivityMainBinding;
 import com.google.gson.Gson;
@@ -27,11 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private QuestionlistAdapter mQuestionlistAdapter;
     private LinearLayoutManager mLinearLayoutManager;
+    AlertDialog.Builder mBuilder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         Initialize();
 
     }
@@ -39,13 +51,13 @@ public class MainActivity extends AppCompatActivity {
     private void Initialize() {
         mRecyclerView = mActivityMainBinding.recycleView;
         String jsonString = loadJSONFromAsset(this, "questionList");
-        Questionlistresponce questionlistresponce= new Gson().fromJson(jsonString, Questionlistresponce.class);
+        Questionlistresponce questionlistresponce = new Gson().fromJson(jsonString, Questionlistresponce.class);
 
         mArrayList = questionlistresponce.getQuestionList();
-        mLinearLayoutManager = new LinearLayoutManager(this,RecyclerView.VERTICAL,false);
+        mLinearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mQuestionlistAdapter = new QuestionlistAdapter(mArrayList,this);
+        mQuestionlistAdapter = new QuestionlistAdapter(mArrayList, this);
         mRecyclerView.setAdapter(mQuestionlistAdapter);
 
     }
@@ -66,11 +78,25 @@ public class MainActivity extends AppCompatActivity {
         return jsonString;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.iteam_menu, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.submit:
+                Toast.makeText(this, "Result", Toast.LENGTH_SHORT).show();
+                break;
+        }
 
 
-
-
-
+        return super.onOptionsItemSelected(item);
+    }
 
 
 }
